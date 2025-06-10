@@ -1,0 +1,9 @@
+target/
+.idea/
+*.class
+*.log
+*.jar
+.metals/
+.bloop/
+.vscode/
+
