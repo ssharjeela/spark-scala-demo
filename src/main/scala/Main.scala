@@ -77,9 +77,28 @@ object DummySparkJob {
     val win = Window.partitionBy("DeptId").orderBy($"Salary".desc)
     val ranked = joinWithDpt.withColumn("Rank", rank().over(win))
 
+    val avgSalByDept = joinWithDpt.groupBy("DeptName").agg(round(avg($"Salary"),2).alias("AvgSalary"))
+
+    println("Avg Salary by Dept")
+    avgSalByDept.show()
+
     println("=== Salary Rank Per Department ===")
     ranked.select("Name","DeptName", "Salary", "Rank").show()
-    
+
+    val withAgeGroup = ranked.withColumn("AgeGroup", when($"Age" < 30 , "Young")
+                                                          .when($"Age" .between(30,40),"Mid-Age")
+                                                          .otherwise("Senior") 
+                                                          )
+    println("=== Employees with Age Group ===")
+
+    withAgeGroup.select("Name","Age","AgeGroup").show()  
+
+    val aboveAvgSalary = salaryFixed.filter($"Salary" > avgSalary)
+    println("=== Above Average Salary ===")
+
+    aboveAvgSalary.show()
+
+
 
 
 
