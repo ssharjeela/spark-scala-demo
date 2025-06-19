@@ -98,9 +98,17 @@ object DummySparkJob {
 
     aboveAvgSalary.show()
 
+    val countHead = withAgeGroup.groupBy("DeptName","AgeGroup").agg(count("*").alias("HeadCount"))
+                                .orderBy("DeptName","AgeGroup")
 
+    println("=== Head Count ===")
+    countHead.show()
 
+    val countEmp = withAgeGroup.groupBy("DeptName").agg(count("*").alias("HeadCount"))
+                                .orderBy("DeptName")
 
+    println("=== Head Count ===")
+    countEmp.show()
 
 
 
